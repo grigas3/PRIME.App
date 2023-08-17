@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResultsFragment">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idResultList"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+        <Button
+            android:id="@+id/button_reload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reload"
+            android:background="@drawable/button_signin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="50px"
+
+            />
+
+
+
+    <LinearLayout
+        android:id="@+id/layoutActivityIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent">
+    <ProgressBar
+
+        android:layout_gravity="center_vertical|center_horizontal"
+
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/ctrlActivityIndicator"
+        android:indeterminateOnly="false"
+        android:keepScreenOn="true"
+        />
+    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+

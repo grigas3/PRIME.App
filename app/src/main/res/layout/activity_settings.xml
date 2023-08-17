@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
+    android:gravity="center"
+    android:padding="5dp"
+    android:id="@+id/log"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_gravity="center">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:padding="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:padding="10px"
+                    android:background="@color/settingHeader"
+                    android:textColor="@color/white"
+                    android:text="Resting Test"
+                    >
+
+                </TextView>
+                <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="10px"
+            android:width="500px"
+            android:text="Sensor"
+            ></TextView>
+        <Spinner
+                    android:id="@+id/pronsup_sensor_spinner"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+                      android:layout_marginTop="10px"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20px"
+                    android:layout_marginBottom="20px"
+                    android:background="#c0c0c0"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:padding="10px"
+                    android:background="@color/settingHeader"
+                    android:textColor="@color/white"
+                    android:text="Pron Sup Test"
+                    >
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="10px"
+                        android:width="500px"
+                        android:text="Sensor"
+                        ></TextView>
+
+                <Spinner
+                    android:id="@+id/resting_sensor_spinner"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+                    android:width="300px"
+                    android:height="80px"
+                    android:layout_marginTop="10px"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+
+                    android:layout_marginTop="20px"
+                    android:layout_marginBottom="20px"
+                    android:background="#c0c0c0"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:padding="10px"
+                    android:background="@color/settingHeader"
+                    android:textColor="@color/white"
+                    android:text="Gait Test"
+                    >
+
+                </TextView>
+                <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:width="500px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="10px"
+
+            android:text="Sensor"
+            ></TextView>
+                <Spinner
+                    android:id="@+id/gait_sensor_spinner"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout><LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:width="500px"
+                    android:layout_marginRight="20px"
+                    android:layout_marginTop="10px"
+
+                    android:text="Distance (meters)"
+                    ></TextView>
+                <EditText
+                    android:id="@+id/gait_distance"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+                    android:width="100px"
+                    android:inputType="number"
+                    android:autofillHints="Gait distance in meters"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:width="500px"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="10px"
+
+                        android:text="Subj. Height (cms)"
+                        ></TextView>
+                    <EditText
+                        android:id="@+id/subject_height"
+                        android:layout_width="match_parent"
+                        android:textSize="20px"
+                        android:width="100px"
+                        android:inputType="number"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="Subject Height" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20px"
+                    android:layout_marginBottom="20px"
+                    android:background="#c0c0c0"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:padding="10px"
+                    android:background="@color/settingHeader"
+                    android:textColor="@color/white"
+                    android:text="Scheduling"
+                    >
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="10px"
+                        android:width="500px"
+                        android:text="Schedule (Every day)"
+                        ></TextView>
+
+                    <Spinner
+                        android:id="@+id/hour_spinner"
+                        android:layout_width="match_parent"
+                        android:textSize="20px"
+                        android:layout_marginTop="10px"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <Button android:id="@+id/schedule_button"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+                    android:layout_marginTop="10px"
+                    android:text="Schedule"
+                    android:width="500px"
+                    android:layout_height="wrap_content"/>
+                <Button android:id="@+id/unschedule_button"
+                    android:layout_width="match_parent"
+                    android:textSize="20px"
+                    android:layout_marginTop="10px"
+                    android:text="Un-Schedule"
+                    android:width="500px"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

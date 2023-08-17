@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gait_sensors_array">
+        <item>Insoles</item>
+        <item>Metawear</item>
+    </string-array>
+</resources>
