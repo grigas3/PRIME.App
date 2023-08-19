@@ -56,7 +56,18 @@
         android:id="@+id/textView"
         android:text="@string/title_scanned_devices"
         android:layout_gravity="center_horizontal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Make sure BLE and location are enabled and the Metawear device is on"
+            ></TextView>
     <include layout="@layout/content_scanner" />
+
     </LinearLayout>
 
 </com.google.android.material.appbar.AppBarLayout>

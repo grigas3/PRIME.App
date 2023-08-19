@@ -21,7 +21,7 @@ public class PronSupEvaluator implements ISymptomEvaluator {
      * @return
      */
     private static double getBradScore(double en){
-        double bradScore = -1.36 * Math.log(en) + 9.36;
+        double bradScore = -0.0044 * (en) + 4.2;
 
         if (bradScore > 4)
             bradScore = 4;

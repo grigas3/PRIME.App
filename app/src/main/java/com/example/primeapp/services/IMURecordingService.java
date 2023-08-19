@@ -15,8 +15,10 @@ import com.example.primeapp.interfaces.IDataShink;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.Route;
 import com.mbientlab.metawear.android.BtleService;
+import com.mbientlab.metawear.data.AngularVelocity;
 import com.mbientlab.metawear.data.Quaternion;
 import com.mbientlab.metawear.module.Gyro;
+import com.mbientlab.metawear.module.GyroBmi160;
 import com.mbientlab.metawear.module.SensorFusionBosch;
 
 import java.io.File;
@@ -61,6 +63,26 @@ public class IMURecordingService extends Service implements IIMURecordingService
 
     BtleService.LocalBinder binder;
 
+
+    public Gyro configureGyro() throws Exception {
+
+        if (binder == null)
+            throw new Exception("Binder Not Found");
+
+        if (btDevice == null)
+            throw new Exception("Device Not Found");
+
+        board = binder.getMetaWearBoard(btDevice);
+        final Gyro sensorFusion = board.getModule(Gyro.class);
+        sensorFusion.configure()
+                .odr(Gyro.OutputDataRate.ODR_50_HZ)
+                .range(Gyro.Range.FSR_2000)
+
+                .commit();
+
+        return sensorFusion;
+    }
+
     public SensorFusionBosch configure() throws Exception {
 
         if (binder == null)
@@ -72,6 +94,7 @@ public class IMURecordingService extends Service implements IIMURecordingService
         board = binder.getMetaWearBoard(btDevice);
         final SensorFusionBosch sensorFusion = board.getModule(SensorFusionBosch.class);
         sensorFusion.configure()
+
                 .mode(SensorFusionBosch.Mode.IMU_PLUS)
                 .accRange(SensorFusionBosch.AccRange.AR_8G)
                 .gyroRange(SensorFusionBosch.GyroRange.GR_2000DPS)
@@ -112,42 +135,46 @@ public class IMURecordingService extends Service implements IIMURecordingService
         }
     }
 
-    SensorFusionBosch sensorFusion=null;
+    Gyro sensorFusion=null;
     public void start(boolean gyro) throws Exception {
-        sensorFusion = configure();
+
 
         if (gyro) {
-            sensorFusion.correctedAngularVelocity().addRouteAsync(source -> source.limit(33).stream((data, env) -> {
+
+            sensorFusion = configureGyro();
+            sensorFusion.angularVelocity().addRouteAsync(source -> source.stream((data, env) -> {
                 // mGLSurfaceView.updateRotation(data.value(Quaternion.class));
 
-                SensorFusionBosch.CorrectedAngularVelocity d = data.value(SensorFusionBosch.CorrectedAngularVelocity.class);
+                AngularVelocity d = data.value((AngularVelocity.class));
                 //  Log.d("IN CUBE ACtivity", data.value(SensorFusionBosch.CorrectedAngularVelocity.class).toString());
                 listeners.forEach(e -> {
 
 
                     e.addData(d);
-                    if (outputStream != null) {
-                        try {
-                            outputWriter.write(data.formattedTimestamp() + "\t" + d.x() + "\t" + d.y() + "\t" + d.z() + "\r\n");
-                        } catch (Exception ex) {
 
-                        }
+
+                });
+
+                if (outputStream != null) {
+                    try {
+                        outputWriter.write(data.formattedTimestamp() + "\t" + d.x() + "\t" + d.y() + "\t" + d.z() + "\r\n");
+                    } catch (Exception ex) {
 
                     }
 
-                });
+                }
                 // outputStreamWriter.write(data.value(Quaternion.class).toString()+'\n');
 
             })).continueWith((Continuation<Route, Void>) ignored -> {
 
-                sensorFusion.correctedAngularVelocity().start();
+                sensorFusion.angularVelocity().start();
                 sensorFusion.start();
                 return null;
             });
         }
         else {
 
-            sensorFusion.correctedAcceleration().addRouteAsync(source -> source.limit(33).stream((data, env) -> {
+       /*     sensorFusion.correctedAcceleration().addRouteAsync(source -> source.stream((data, env) -> {
                 // mGLSurfaceView.updateRotation(data.value(Quaternion.class));
 
                 SensorFusionBosch.CorrectedAcceleration d = data.value(SensorFusionBosch.CorrectedAcceleration.class);
@@ -174,6 +201,8 @@ public class IMURecordingService extends Service implements IIMURecordingService
                 sensorFusion.start();
                 return null;
             });
+            */
+
 
         }
 
@@ -186,7 +215,7 @@ public class IMURecordingService extends Service implements IIMURecordingService
         if(sensorFusion==null)
             return;
 
-        sensorFusion.correctedAngularVelocity().stop();
+        sensorFusion.angularVelocity().stop();
         sensorFusion.stop();
 
         closeFile();

@@ -3,6 +3,8 @@ package com.example.primeapp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.example.primeapp.algos.DetectorHelpers;
+import com.example.primeapp.algos.DyskinesiaDetector;
 import com.example.primeapp.algos.DyskinesiaEvaluator;
 import com.example.primeapp.algos.PronSupEvaluator;
 import com.example.primeapp.algos.TremorEvaluator;
@@ -11,8 +13,12 @@ import com.example.primeapp.algos.core.Signals.SignalCollection;
 import com.example.primeapp.mock.MockIMUDataCollector;
 import com.example.primeapp.models.Observation;
 
+import org.jtransforms.fft.FloatFFT_1D;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.jar.Attributes;
 
 public class algoTests {
@@ -232,5 +238,93 @@ public class algoTests {
 
 
     }
+
+    @Test
+    public void testPSDCase1() throws Exception {
+
+
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("testCase1.txt");
+        InputStreamReader reader = new InputStreamReader(in);
+        BufferedReader breader = new BufferedReader(reader);
+
+        NamedSignalCollection signalCollection = new NamedSignalCollection();
+        SignalCollection s = new SignalCollection(6, 2865);
+        signalCollection.set___idx("IMU",s);
+        int count = 0;
+        while (breader.ready()) {
+            String line = breader.readLine();
+            String[] vals = line.split("\t");
+
+            for (int i = 0; i < 6; i++) {
+
+                s.setValue(i, count, Double.parseDouble(vals[i]));
+            }
+
+            count++;
+        }
+
+        int window=128;
+        FloatFFT_1D fft = new FloatFFT_1D(window);
+        SignalCollection signal = signalCollection.get___idx("IMU");
+        double[] psd= DetectorHelpers.estimatePSDEn(fft,signal,0,window);
+
+
+        double[] psdEns=new double[]{0.0000,
+                                4.8849,
+                5.1623,
+                3.9384,
+                5.7754};
+
+
+        for(int i=0;i<psdEns.length;i++)
+            assertEquals(psdEns[i],psd[i],0.001);
+
+
+    }
+
+    @Test
+    public void testCase1() throws Exception {
+
+
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("testCase1.txt");
+        InputStreamReader reader = new InputStreamReader(in);
+        BufferedReader breader = new BufferedReader(reader);
+
+        NamedSignalCollection signalCollection = new NamedSignalCollection();
+        SignalCollection s = new SignalCollection(6, 1433);
+        signalCollection.set___idx("IMU",s);
+        int count = 0;
+        while (breader.ready()) {
+            String line = breader.readLine();
+            String[] vals = line.split("\t");
+
+            for (int i = 0; i < 6; i++) {
+
+                s.setValue(i, count, Double.parseDouble(vals[i]));
+            }
+
+            count++;
+        }
+
+
+        DyskinesiaEvaluator evaluator=new DyskinesiaEvaluator();
+
+        Observation obs=evaluator.Evaluate(signalCollection);
+
+        assertEquals( 36.3636,obs.getValue(),0.1);
+
+
+        TremorEvaluator tevaluator=new TremorEvaluator();
+
+        Observation obs1=tevaluator.Evaluate(signalCollection);
+
+        assertEquals( 27.272,obs1.getValue(),0.1);
+
+
+
+
+    }
+
+
 
 }

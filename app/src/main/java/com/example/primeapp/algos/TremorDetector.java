@@ -228,42 +228,29 @@ public class TremorDetector {
             SignalCollection signal = signalCollection.get___idx("IMU");
 
             for (int i = 0; i < signal.getSize(); i += window) {
+                if(i+window>signal.getSize())
+                    continue;
+
+                double[] totalPS =DetectorHelpers.estimatePSDEn(fft,signal,i,window);
 
 
-                double[] totalPS = new double[window];
-                for (int channel = 3; channel < 6; channel++) {
-
-                    SignalBuffer buffer = signal.get___idx(channel);
-
-                    for (int j = 0; j < 2 * window; j++) {
-                        x[j] = 0;
-                    }
-
-                    for (int j = 0; j < window; j++) {
-                        x[2 * j] = (float) buffer.get___idx(i + j);
-                    }
-                    fft.realForwardFull(x);
-
-                    double[] ps = getPowerSpectrum(x);
-
-                    for (int k = 0; k < window; k++)
-                        totalPS[k] += ps[k];
-                }
                 double totalTremorEnergyWindow1 = 0.00000000001;
                 double totalTremorEnergyWindow2 = 0.00000000001;
                 double meanPsdx=0;
                 double maxPsdx=Double.MIN_VALUE;
-                for (int j = s1; j < s2; j++){
+                int pc=0;
+                for (int j = s1+1; j < s2-1; j++){
                     if(totalPS[j]>maxPsdx)
                         maxPsdx=totalPS[j];
                     meanPsdx+=totalPS[j];
+                    pc++;
                     totalTremorEnergyWindow1 += totalPS[j];
 
                 }
-                meanPsdx=meanPsdx/(s2-s1-1);
+                meanPsdx=meanPsdx/pc;
                 double m1=maxPsdx/(meanPsdx+0.00000000001);
 
-                for (int j = 1; j < s1; j++){
+                for (int j = 1; j <=s1; j++){
                     totalTremorEnergyWindow2 += totalPS[j];
 
                 }
