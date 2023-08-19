@@ -6,6 +6,11 @@ import com.example.primeapp.models.Observation;
 
 
 public class StanceTimeEvaluator extends BaseGaitEvaluator implements ISymptomEvaluator {
+
+    public StanceTimeEvaluator(boolean s)
+    {
+        super(s);
+    }
     @Override
     public Observation Evaluate(NamedSignalCollection signalCollection) {
 

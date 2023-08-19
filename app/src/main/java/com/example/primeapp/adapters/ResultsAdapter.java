@@ -46,6 +46,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         holder.obsName.setText(model.getCode());
         holder.obsValue.setText("" +df.format(model.getValue()));
 
+        holder.obsUnits.setText(model.getUnits());
+
     }
     private static final DecimalFormat df = new DecimalFormat("0.00");
     @Override
@@ -59,12 +61,14 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
         private final TextView obsName;
         private final TextView obsValue;
+        private final TextView obsUnits;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             obsName = itemView.findViewById(R.id.idObsName);
             obsValue = itemView.findViewById(R.id.idObsValue);
+            obsUnits = itemView.findViewById(R.id.idObsUnit);
         }
     }
 }

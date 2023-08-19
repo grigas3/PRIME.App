@@ -14,7 +14,7 @@ public abstract class BaseGaitEvaluator {
 
 
     private final static double amp_thresh = 1;
-    private final static double dur_thresh = 1;
+    private final static double dur_thresh = 5;
 
     private final static double height_thresh = 100;
     private final static double THRES = 3;
@@ -33,7 +33,7 @@ public abstract class BaseGaitEvaluator {
 
     protected GaitResults EvaluateGaitFromIMU(NamedSignalCollection signalCollection) {
 
-        double dt = 0.01;
+        double dt = 0.02;
 
         double firstStepIndex = -1;
         double lastStepIndex = -1;
@@ -43,13 +43,11 @@ public abstract class BaseGaitEvaluator {
         double totalStanceTimeR = 0;
         double totalSwingTimeR = 0;
         double totaldoubleSupport = 0;
-
         ArrayList<PeakData> current_peaks = new ArrayList<PeakData>();
-        int totalForceL = 23;
-        int totalForceR = 48;
+
         try {
 
-            SignalCollection data = signalCollection.get___idx("imu");
+            SignalCollection data = signalCollection.get___idx("IMU");
 
 
             SignalBuffer tmpBuffer = data.get___idx(5);

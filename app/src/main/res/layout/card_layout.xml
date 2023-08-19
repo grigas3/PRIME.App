@@ -42,7 +42,7 @@
         <!-- Image used in present in drawable folder -->
         <TextView
             android:id="@+id/idObsValue"
-            android:layout_width="match_parent"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
 
             android:layout_marginStart="10dp"
@@ -54,5 +54,19 @@
             android:textStyle="bold"
             android:text="@string/obsValue"
              />
+
+        <TextView
+            android:id="@+id/idObsUnit"
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@id/idObsValue"
+            android:text="Units"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -16,9 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.primeapp.algos.DoubleSupportTimeEvaluator;
 import com.example.primeapp.algos.DyskinesiaEvaluator;
 import com.example.primeapp.algos.GaitEvaluator;
+import com.example.primeapp.algos.GaitSpeedEvaluator;
 import com.example.primeapp.algos.PronSupEvaluator;
+import com.example.primeapp.algos.StanceTimeEvaluator;
+import com.example.primeapp.algos.StepIMUEvaluator;
+import com.example.primeapp.algos.StepTimeEvaluator;
+import com.example.primeapp.algos.StideLengthEvaluator;
 import com.example.primeapp.algos.TremorEvaluator;
 import com.example.primeapp.databinding.FragmentTestrunBinding;
 import com.example.primeapp.insoles.HoloMoticonAgent;
@@ -53,7 +59,8 @@ public class TestRunFragment extends Fragment implements IDataListener {
     private FragmentTestrunBinding binding;
 
     private IDataCollector collector = null;
-    private String testSelected ="";
+    private String testSelected = "";
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -65,7 +72,6 @@ public class TestRunFragment extends Fragment implements IDataListener {
         initTest(testSelected);
         binding = FragmentTestrunBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
 
 
     }
@@ -91,7 +97,6 @@ public class TestRunFragment extends Fragment implements IDataListener {
         }
 
 
-
     }
 
     private LineGraphSeries<DataPoint> seriesLeft;
@@ -100,98 +105,114 @@ public class TestRunFragment extends Fragment implements IDataListener {
     private LineGraphSeries<DataPoint> seriesGyroLx;
     private LineGraphSeries<DataPoint> seriesGyroLy;
     private LineGraphSeries<DataPoint> seriesGyroLz;
-private void initChart(View view){
+
+    private void initChart(View view) {
 
 
-    GraphView graph1 = (GraphView) view.findViewById(R.id.graph01);
-    if(testSelected==TestCodes.Walking)
-    {
-        seriesLeft = new LineGraphSeries<>();
-        seriesRight = new LineGraphSeries<>();
+        GraphView graph1 = (GraphView) view.findViewById(R.id.graph01);
+        if (testSelected == TestCodes.Walking&&isInsoleSelected()) {
+            seriesLeft = new LineGraphSeries<>();
+            seriesRight = new LineGraphSeries<>();
 
-        graph1.addSeries(seriesLeft);
-        graph1.addSeries(seriesRight);
+            graph1.addSeries(seriesLeft);
+            graph1.addSeries(seriesRight);
 
-        seriesLeft.setColor(Color.RED);
-        seriesLeft.setTitle("Left Sole");
-        seriesRight.setColor(Color.GREEN);
-        seriesRight.setTitle("Right Sole");
+            seriesLeft.setColor(Color.RED);
+            seriesLeft.setTitle("Left Sole");
+            seriesRight.setColor(Color.GREEN);
+            seriesRight.setTitle("Right Sole");
 
-        graph1.getLegendRenderer().setVisible(true);//more edit
-        graph1.getLegendRenderer().setTextSize(40);
-        graph1.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+            graph1.getLegendRenderer().setVisible(true);//more edit
+            graph1.getLegendRenderer().setTextSize(40);
+            graph1.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        graph1.setTitle("Left(Red) Right(Green)");
-        graph1.setTitleTextSize(30);
-        //graph1.getGridLabelRenderer().setHorizontalAxisTitle("sample");
-        graph1.getGridLabelRenderer().setVerticalAxisTitle("Pressure");
+            graph1.setTitle("Left(Red) Right(Green)");
+            graph1.setTitleTextSize(30);
+            //graph1.getGridLabelRenderer().setHorizontalAxisTitle("sample");
+            graph1.getGridLabelRenderer().setVerticalAxisTitle("Pressure");
+
+        } else {
+
+
+            seriesGyroLx = new LineGraphSeries<>();
+            seriesGyroLy = new LineGraphSeries<>();
+            seriesGyroLz = new LineGraphSeries<>();
+            seriesGyroLx.setColor(Color.RED);
+            seriesGyroLx.setTitle("GyroLx");
+            seriesGyroLy.setColor(Color.GREEN);
+            seriesGyroLy.setTitle("GyroLy");
+            seriesGyroLz.setColor(Color.BLUE);
+            seriesGyroLz.setTitle("GyroLz");
+            //graph1.getGraphContentWidth();
+            //graph1.getViewport().;
+            //graph1.getGridLabelRenderer().setSecondScaleLabelVerticalWidth(4);
+            graph1.addSeries(seriesGyroLx);
+            graph1.addSeries(seriesGyroLy);
+            graph1.addSeries(seriesGyroLz);
+            graph1.getLegendRenderer().setVisible(true);//more edit
+            graph1.getLegendRenderer().setTextSize(40);
+            graph1.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+            graph1.setTitle("Gx(Red) Hy(Green) Gz(Blue)");
+            graph1.setTitleTextSize(30);
+            graph1.getGridLabelRenderer().setHorizontalAxisTitle("sample");
+            graph1.getGridLabelRenderer().setVerticalAxisTitle("Gyro (deg/sec)");
+
+
+        }
+
+        graph1.getViewport().setXAxisBoundsManual(true);
+        graph1.getViewport().setMinX(0);
+        graph1.getViewport().setMaxX(1000);
+        graph1.getViewport().setScrollable(true);
 
     }
-    else {
-
-
-        seriesGyroLx = new LineGraphSeries<>();
-        seriesGyroLy = new LineGraphSeries<>();
-        seriesGyroLz = new LineGraphSeries<>();
-        seriesGyroLx.setColor(Color.RED);
-        seriesGyroLx.setTitle("GyroLx");
-        seriesGyroLy.setColor(Color.GREEN);
-        seriesGyroLy.setTitle("GyroLy");
-        seriesGyroLz.setColor(Color.BLUE);
-        seriesGyroLz.setTitle("GyroLz");
-        //graph1.getGraphContentWidth();
-        //graph1.getViewport().;
-        //graph1.getGridLabelRenderer().setSecondScaleLabelVerticalWidth(4);
-        graph1.addSeries(seriesGyroLx);
-        graph1.addSeries(seriesGyroLy);
-        graph1.addSeries(seriesGyroLz);
-        graph1.getLegendRenderer().setVisible(true);//more edit
-        graph1.getLegendRenderer().setTextSize(40);
-        graph1.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
-        graph1.setTitle("Gx(Red) Hy(Green) Gz(Blue)");
-        graph1.setTitleTextSize(30);
-        graph1.getGridLabelRenderer().setHorizontalAxisTitle("sample");
-        graph1.getGridLabelRenderer().setVerticalAxisTitle("Gyro (deg/sec)");
-
-
-
-    }
-
-    graph1.getViewport().setXAxisBoundsManual(true);
-    graph1.getViewport().setMinX(0);
-    graph1.getViewport().setMaxX(1000);
-    graph1.getViewport().setScrollable(true);
-
-}
 
     List<ISymptomEvaluator> evaluatorList = new ArrayList<ISymptomEvaluator>() {
 
 
     };
 
+
+    private boolean isInsoleSelected()
+    {
+        return false;
+
+    }
     int testDuration = 0;
 
     private void initWalkingTest() {
 
         //Init Evaluators
         evaluatorList.clear();
-        evaluatorList.add(new GaitEvaluator());
+       // evaluatorList.add(new GaitEvaluator());
+        evaluatorList.add(new StepIMUEvaluator(isInsoleSelected()));
+        evaluatorList.add(new StepTimeEvaluator(isInsoleSelected()));
+        //evaluatorList.add(new DoubleSupportTimeEvaluator(isInsoleSelected()));
+        //  evaluatorList.add(new StanceTimeEvaluator(isInsoleSelected()));
+        evaluatorList.add(new StideLengthEvaluator(100, 10,isInsoleSelected()));
+        evaluatorList.add(new GaitSpeedEvaluator(100, 10,isInsoleSelected()));
         testDuration = 60;
         //Int DataCollector
         try {
 
 
-            agent=new HoloMoticonAgent(getContext());
-            collector=agent;
-            //collector = new IMUDataCollector(getIMUService());
+
+            if(isInsoleSelected()) {
+                agent = new HoloMoticonAgent(getContext());
+
+                collector = agent;
+            }
+            else
+            collector = new IMUDataCollector(getIMUService());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    HoloMoticonAgent agent=null;
 
-    HoloMoticonAgent getHoloService(){
+    HoloMoticonAgent agent = null;
+
+    HoloMoticonAgent getHoloService() {
 
         return agent;
     }
@@ -209,13 +230,11 @@ private void initChart(View view){
         }
 
 
-
     }
 
-    private IIMURecordingService getIMUService()
-    {
-        MainActivity main=(MainActivity)getActivity();
-        IIMURecordingService service=main.getImuService();
+    private IIMURecordingService getIMUService() {
+        MainActivity main = (MainActivity) getActivity();
+        IIMURecordingService service = main.getImuService();
         return service;
     }
 
@@ -230,7 +249,6 @@ private void initChart(View view){
 
         //Int DataCollector
         collector = new IMUDataCollector(getIMUService());
-
 
 
     }
@@ -253,22 +271,23 @@ private void initChart(View view){
     }
 
 
-    int sample=0;
+    int sample = 0;
 
-    List<AngularVelocity> tmpdata=new ArrayList<>();
-    List<PressureData> tmpPressureData=new ArrayList<>();
+    List<AngularVelocity> tmpdata = new ArrayList<>();
+    List<PressureData> tmpPressureData = new ArrayList<>();
 
-    List<AngularVelocity> imudata=new ArrayList<>();
+    List<AngularVelocity> imudata = new ArrayList<>();
 
-    List<Acceleration> tmpAccdata=new ArrayList<>();
+    List<Acceleration> tmpAccdata = new ArrayList<>();
 
-    List<Acceleration> accdata=new ArrayList<>();
-    List<PressureData> pressureData=new ArrayList<>();
+    List<Acceleration> accdata = new ArrayList<>();
+    List<PressureData> pressureData = new ArrayList<>();
+
     @Override
     public void addData(AngularVelocity data) {
         tmpdata.add(data);
         //If size is more than 50 samples then update the list with a runnable
-        if(tmpdata.size()>=20) {
+        if (tmpdata.size() >= 20) {
 
             imudata.addAll(tmpdata);
             tmpdata.clear();
@@ -282,10 +301,9 @@ private void initChart(View view){
     public void addData(Acceleration data) {
 
 
-
         tmpAccdata.add(data);
         //If size is more than 50 samples then update the list with a runnable
-        if(tmpAccdata.size()>=20) {
+        if (tmpAccdata.size() >= 20) {
 
             accdata.addAll(tmpAccdata);
             tmpAccdata.clear();
@@ -298,7 +316,7 @@ private void initChart(View view){
 
         tmpPressureData.add(data);
         //If size is more than 50 samples then update the list with a runnable
-        if(tmpPressureData.size()>=50) {
+        if (tmpPressureData.size() >= 50) {
 
             pressureData.addAll(tmpPressureData);
             tmpPressureData.clear();
@@ -306,7 +324,7 @@ private void initChart(View view){
         }
     }
 
-    private Runnable newDataUpdate = new Runnable(){
+    private Runnable newDataUpdate = new Runnable() {
         @Override
         public void run() {
 //            if(MainActivity.isHandlerThreadAlive==1){
@@ -315,15 +333,15 @@ private void initChart(View view){
             try {
 
 
-                    for (AngularVelocity data :
-                            imudata) {
+                for (AngularVelocity data :
+                        imudata) {
 
-                        seriesGyroLx.appendData(new DataPoint(sample, data.x()), true, 1000);
-                        seriesGyroLy.appendData(new DataPoint(sample, data.y()), true, 1000);
-                        seriesGyroLz.appendData(new DataPoint(sample, data.z()), true, 1000);
+                    seriesGyroLx.appendData(new DataPoint(sample, data.x()), true, 1000);
+                    seriesGyroLy.appendData(new DataPoint(sample, data.y()), true, 1000);
+                    seriesGyroLz.appendData(new DataPoint(sample, data.z()), true, 1000);
 
-                        sample++;
-                    }
+                    sample++;
+                }
                 imudata.clear();
                 for (PressureData data :
                         pressureData) {
@@ -333,7 +351,6 @@ private void initChart(View view){
                     seriesRight.appendData(new DataPoint(sample, data.right()), true, 1000);
 
                     sample++;
-
 
 
                 }
@@ -348,7 +365,7 @@ private void initChart(View view){
     };
 
 
-    private Runnable newAccDataUpdate = new Runnable(){
+    private Runnable newAccDataUpdate = new Runnable() {
         @Override
         public void run() {
 //            if(MainActivity.isHandlerThreadAlive==1){
@@ -425,7 +442,7 @@ private void initChart(View view){
         super.onViewCreated(view, savedInstanceState);
 
         initChart(view);
-        TestRunFragment fragment=this;
+        TestRunFragment fragment = this;
 
         binding.startStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -435,8 +452,8 @@ private void initChart(View view){
                     running = false;
                     if (collector != null)
                         collector.Stop();
-                    IIMURecordingService service= getIMUService();
-                    if(service!=null)
+                    IIMURecordingService service = getIMUService();
+                    if (service != null)
                         service.unregisterListener(fragment);
                     //  binding.startStop.setText(R.string.start);
                     new ProcessTask(collector).execute(evaluatorList);
@@ -448,12 +465,12 @@ private void initChart(View view){
                     if (collector != null)
                         collector.Start();
 
-                    IIMURecordingService service= getIMUService();
-                    if(service!=null)
+                    IIMURecordingService service = getIMUService();
+                    if (service != null)
                         service.registerListener(fragment);
 
-                    HoloMoticonAgent agent= getHoloService();
-                    if(agent!=null)
+                    HoloMoticonAgent agent = getHoloService();
+                    if (agent != null)
                         agent.registerListener(fragment);
 
 

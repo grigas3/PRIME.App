@@ -18,6 +18,42 @@ public class DetectorHelpers {
         return power_spectrum;
     }
 
+    public static float[] estimateRMS(SignalCollection signal, int i, int window) throws Exception {
+
+
+        float[] avg = new float[3];
+
+        for (int channel = 3; channel < 6; channel++) {
+
+            SignalBuffer buffer = signal.get___idx(channel);
+            float mean = 0;
+            for (int j = 0; j < window; j++) {
+                mean += (float) buffer.get___idx(i + j);
+            }
+
+            avg[channel-3]=mean/window;
+
+        }
+        float en=0;
+        float percentMov=0;
+        for (int j = 0; j < window; j++) {
+
+            float v=0;
+            float rms=0;
+            for (int channel = 3; channel < 6; channel++) {
+                SignalBuffer buffer = signal.get___idx(channel);
+               v= (float) buffer.get___idx(i + j) - avg[channel-3];
+               rms+=v*v;
+            }
+            en+=Math.sqrt(rms);
+
+            percentMov+=Math.sqrt(rms)>10?1:0;
+        }
+
+       return new float[]{en/window,percentMov/window};
+    }
+
+
     public static double[] estimatePSDEn(FloatFFT_1D fft, SignalCollection signal, int i, int window) throws Exception {
 
         float[] x = new float[2 * window];

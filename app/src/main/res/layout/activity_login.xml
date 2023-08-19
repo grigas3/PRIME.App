@@ -84,19 +84,19 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/passRecover"
+                <ImageView
+                    android:id="@+id/profile2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="@string/pass_recover"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+                    android:layout_height="200px"
+                    android:layout_marginTop="60dp"
+
+
+                    android:padding="15dp"
+                    android:src="@drawable/footer"
+                    tools:srcCompat="@drawable/footer" />
 
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
@@ -108,6 +108,8 @@
         android:layout_marginTop="-60dp"
 
         android:padding="15dp"
-        android:src="@drawable/icon" />
+        android:src="@drawable/ic_launcher_foreground"
+        tools:srcCompat="@drawable/ic_launcher_foreground" />
+
 
 </RelativeLayout>

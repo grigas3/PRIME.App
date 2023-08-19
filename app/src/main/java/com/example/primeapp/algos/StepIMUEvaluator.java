@@ -6,8 +6,8 @@ import com.example.primeapp.models.Observation;
 
 public class StepIMUEvaluator extends BaseGaitEvaluator implements ISymptomEvaluator {
 
-    public StepIMUEvaluator() {
-        super(false);
+    public StepIMUEvaluator(boolean s) {
+        super(s);
     }
 
     @Override

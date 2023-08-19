@@ -21,7 +21,7 @@ public class PronSupEvaluator implements ISymptomEvaluator {
      * @return
      */
     private static double getBradScore(double en){
-        double bradScore = -0.0044 * (en) + 4.2;
+        double bradScore = -0.9157 * Math.log(en) + 6.4;
 
         if (bradScore > 4)
             bradScore = 4;
@@ -35,27 +35,21 @@ public class PronSupEvaluator implements ISymptomEvaluator {
 
         double totalBradScore=0;
         int bradScoreEvaluations=0;
-        int window=256;
+        int window=128;
+        int slidewindow=50;
         SignalCollection signal = signalCollection.get___idx("IMU");
 
-        for(int i=0;i<6;i++){
 
-            SignalBuffer yt = signal.get___idx(i);
-            double average=yt.average();
-            yt.addScalar(-average);
-        }
-        SignalBuffer y = signal.get_energy_signal(3,6);
+        for (int i = 0; i < signal.getSize(); i += slidewindow) {
 
+            if(i+window>=signal.getSize())
+                continue;;
 
-        for (int i = 0; i < y.getSize()-window; i += window) {
+                float[] res=DetectorHelpers.estimateRMS(signal,i,window);
 
-                double en=0;
-                for (int k = 0; k < window; k++)
-                    en += y.get___idx(i+k);
-
-                en=en/window;
-
-                if(en>10) {
+                double en=res[0];
+                double percentMotion=res[1];
+                if(percentMotion>0.8) {
                     double bradScore =getBradScore(en);
                     bradScoreEvaluations++;
                     totalBradScore += bradScore;
@@ -82,6 +76,6 @@ public class PronSupEvaluator implements ISymptomEvaluator {
 
             Log.e("IMU", "Evaluation ",ex );
         }
-        return new Observation("BRAD",value);
+        return new Observation("BRAD",value,"UPDRS");
     }
 }

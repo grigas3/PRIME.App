@@ -98,7 +98,7 @@ public  class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         emailError = findViewById(R.id.emailError);
         passError = findViewById(R.id.passError);
-        pass_frg = findViewById(R.id.passRecover);
+
 
         login = findViewById(R.id.login);
 

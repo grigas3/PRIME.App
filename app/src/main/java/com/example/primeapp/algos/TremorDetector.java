@@ -210,7 +210,7 @@ public class TremorDetector {
         double threshold = 50;
         //int window = 256;
         int window = 128;
-
+        int slidewindow = 32;
         double f1 = 3.5;
         double f2 = 7.5;
         int s1 = (int) (f1 / fs * window);
@@ -227,7 +227,7 @@ public class TremorDetector {
 
             SignalCollection signal = signalCollection.get___idx("IMU");
 
-            for (int i = 0; i < signal.getSize(); i += window) {
+            for (int i = 0; i < signal.getSize(); i += slidewindow) {
                 if(i+window>signal.getSize())
                     continue;
 

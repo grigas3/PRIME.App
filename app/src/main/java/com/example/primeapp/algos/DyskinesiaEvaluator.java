@@ -41,6 +41,6 @@ public class DyskinesiaEvaluator implements ISymptomEvaluator {
 
         double percent=detector.dysPercent(signalCollection,50);
 
-        return new Observation("DYS",percent);
+        return new Observation("DYSKINESIA",percent,"%");
     }
 }

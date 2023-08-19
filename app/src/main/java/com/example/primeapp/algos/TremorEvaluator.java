@@ -12,6 +12,6 @@ public class TremorEvaluator implements ISymptomEvaluator {
 
         TremorDetector detector=new TremorDetector();
         double percent=detector.tremorPercent(signalCollection,50);
-        return new Observation("TREMOR",percent);
+        return new Observation("TREMOR",percent,"%");
     }
 }

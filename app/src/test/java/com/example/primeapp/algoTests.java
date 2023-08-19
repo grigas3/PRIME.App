@@ -7,6 +7,7 @@ import com.example.primeapp.algos.DetectorHelpers;
 import com.example.primeapp.algos.DyskinesiaDetector;
 import com.example.primeapp.algos.DyskinesiaEvaluator;
 import com.example.primeapp.algos.PronSupEvaluator;
+import com.example.primeapp.algos.StepIMUEvaluator;
 import com.example.primeapp.algos.TremorEvaluator;
 import com.example.primeapp.algos.core.Signals.NamedSignalCollection;
 import com.example.primeapp.algos.core.Signals.SignalCollection;
@@ -325,6 +326,43 @@ public class algoTests {
 
     }
 
+    @Test
+    public void testpronSupCase1() throws Exception {
+
+
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("testPronSupCase1.txt");
+        InputStreamReader reader = new InputStreamReader(in);
+        BufferedReader breader = new BufferedReader(reader);
+
+        NamedSignalCollection signalCollection = new NamedSignalCollection();
+        SignalCollection s = new SignalCollection(6, 1606);
+        signalCollection.set___idx("IMU",s);
+        int count = 0;
+        while (breader.ready()) {
+            String line = breader.readLine();
+            String[] vals = line.split("\t");
+
+            for (int i = 0; i < 6; i++) {
+
+                s.setValue(i, count, Double.parseDouble(vals[i]));
+            }
+
+            count++;
+        }
+
+
+        PronSupEvaluator evaluator=new PronSupEvaluator();
+
+        Observation obs=evaluator.Evaluate(signalCollection);
+
+        assertEquals( 0.74,obs.getValue(),0.01);
+
+
+
+
+
+
+    }
 
 
 }

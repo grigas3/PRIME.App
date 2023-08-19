@@ -9,7 +9,14 @@ import com.example.primeapp.models.Observation;
  */
 public class DoubleSupportTimeEvaluator extends BaseGaitEvaluator implements ISymptomEvaluator {
 
-
+    public DoubleSupportTimeEvaluator()
+    {
+        super(true);
+    }
+    public DoubleSupportTimeEvaluator(boolean s)
+    {
+        super(s);
+    }
     @Override
     public Observation Evaluate(NamedSignalCollection signalCollection) {
 

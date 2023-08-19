@@ -8,16 +8,25 @@ public class StideLengthEvaluator extends BaseGaitEvaluator implements ISymptomE
     private float height;
     private float distance;
 
-    public StideLengthEvaluator(int h, float d) {
+    private boolean insoles=true;
+
+    public StideLengthEvaluator(int h, float d,boolean sole) {
         height = h / 100.0f;
         distance = d;
+        insoles=sole;
     }
 
     @Override
     public Observation Evaluate(NamedSignalCollection signalCollection) {
 
-        GaitResults g = EvaluateGait(signalCollection);
-        return new Observation("STRIDE", g.getSteps() / height / distance);
+        if(insoles) {
+            GaitResults g = EvaluateGait(signalCollection);
+            return new Observation("STRIDE", g.getSteps() / height / distance,"meters");
+        }
+        else{
+            GaitResults g = EvaluateGaitFromIMU(signalCollection);
+            return new Observation("STRIDE", g.getSteps() / height / distance,"meters");
+        }
     }
 }
 

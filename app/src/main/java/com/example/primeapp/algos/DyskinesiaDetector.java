@@ -21,6 +21,7 @@ public class DyskinesiaDetector {
         double threshold = 64;
 
         int window = 128;
+        int slidewindow = 32;
 
         double f1 = 3.5;
         double f2 = 7.5;
@@ -37,7 +38,7 @@ public class DyskinesiaDetector {
             FloatFFT_1D fft = new FloatFFT_1D(window);
 
             SignalCollection signal = signalCollection.get___idx("IMU");
-            for (int i = 0; i < signal.getSize(); i += window) {
+            for (int i = 0; i < signal.getSize(); i += slidewindow) {
 
                 if(i+window>signal.getSize())
                     continue;
@@ -53,7 +54,7 @@ public class DyskinesiaDetector {
                     totalDysEnergyWindow2 += totalPS[j];
 
                 }
-                double w1 = BaseMath.sigmoidS(totalDysEnergyWindow2 / (totalDysEnergyWindow1 + totalDysEnergyWindow2), 10, 0.5);
+                double w1 = BaseMath.sigmoidS(totalDysEnergyWindow2 / (totalDysEnergyWindow1 + totalDysEnergyWindow2), 15, 0.7);
 
                 totalDyskinesia += ((w1 * totalDysEnergyWindow2) > threshold ? 1 : 0);
                 n++;

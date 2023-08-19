@@ -8,15 +8,19 @@ public class GaitSpeedEvaluator extends BaseGaitEvaluator implements ISymptomEva
     private float height;
     private float distance;
 
-    public GaitSpeedEvaluator(int h, float d) {
+
+    public GaitSpeedEvaluator(int h, float d,boolean s) {
+        super(s);
         height = h / 100.0f;
         distance = d;
+
     }
 
     @Override
     public Observation Evaluate(NamedSignalCollection signalCollection) {
 
-        GaitResults g = EvaluateGait(signalCollection);
-        return new Observation("SPEED", g.getTotalTime() / distance / height);
+            GaitResults g = EvaluateGait(signalCollection);
+            return new Observation("SPEED", (distance/g.getTotalTime())  / height,"m/sec");
+
     }
 }
